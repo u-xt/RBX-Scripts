@@ -1,0 +1,88 @@
+-- if it not work change placeid = 16033173781
+-- keybind - C [god macro and hard to control)
+-- keybind - X (normal first person macro easy to control)
+-- keybind - Z (auto macro it easy to escape)
+
+if game.PlaceId == 2788229376 then
+    if getgenv().L_15 == true then
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Speed Glitch",
+            Text = "Already Executed"
+        })
+        return
+    end
+    getgenv().L_15 = true -- don't change me
+    
+    getgenv().Notification = true
+    getgenv().AutoMacro = true
+    getgenv().Macro = true
+    getgenv().AutoMacroKey = Enum.KeyCode.Z
+    getgenv().MacroKey = Enum.KeyCode.X
+    getgenv().MacroMode = "Mouse" -- Keyboard, Mouse
+    getgenv().GodMacro = true
+    getgenv().GodMacroKey = Enum.KeyCode.C
+    getgenv().GodMacroAuto = false
+
+    local function SendNotification(title, text)
+        if getgenv().Notification then
+            game.StarterGui:SetCore("SendNotification", {
+                Title = title,
+                Text = text
+            })
+        end
+    end
+
+    local function PerformMacro(macroName, macroToggle, macroKey, macroMode, macroFunc)
+        if getgenv()[macroName] == true then
+            game:GetService("UserInputService").InputBegan:Connect(function(input, chatting)
+                if input.UserInputType == Enum.UserInputType.Keyboard and not chatting then
+                    if input.KeyCode == macroKey then
+                        if not getgenv()[macroToggle] then
+                            SendNotification(macroName, macroName .. ": On")
+                            getgenv()[macroToggle] = true
+                            spawn(macroFunc)
+                        else
+                            SendNotification(macroName, macroName .. ": Off")
+                            getgenv()[macroToggle] = false
+                        end
+                    end
+                end
+            end)
+        end
+    end
+
+    local function PerformAutoMacro()
+        while getgenv().AutoMacro do
+            wait()
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, "S", false, game)
+        end
+    end
+
+    local function PerformRegularMacro()
+        while getgenv().Macro do
+            wait()
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, "I", false, game)
+            wait()
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, "O", false, game)
+        end
+    end
+
+    local function PerformGodMacro()
+        while getgenv().GodMacro do
+            wait()
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, "I", false, game)
+            wait()
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, "O", false, game)
+        end
+    end
+
+    PerformMacro("AutoMacro", "AutoMacroToggle", getgenv().AutoMacroKey, getgenv().MacroMode, PerformAutoMacro)
+    PerformMacro("Macro", "MacroToggle", getgenv().MacroKey, getgenv().MacroMode, PerformRegularMacro)
+    PerformMacro("GodMacro", "GodMacroToggle", getgenv().GodMacroKey, getgenv().MacroMode, PerformGodMacro)
+
+    if getgenv().GodMacroAuto then
+        game:service'Players'.LocalPlayer.Character:findFirstChildOfClass'Humanoid'.Running:Connect(function()
+            Animation:Stop()
+        end)
+    end
+end
