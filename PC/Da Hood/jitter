@@ -1,0 +1,4 @@
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+            CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position) *
+            CFrame.Angles(0, math.rad(Angle) + math.rad((math.random(1, 2) == 1 and Jit or -Jit)), 0)
+    end
