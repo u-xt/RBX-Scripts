@@ -1,0 +1,13 @@
+-- Toggles
+getgenv().XAnti = true 
+getgenv().AntiStrength = 1000 --(800-1500 is best)
+
+-- Work Part
+game:GetService("RunService").heartbeat:Connect(function()
+    if getgenv().XAnti ~= false then 
+    local vel = game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity
+    game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(getgenv().AntiStrength,0,0) 
+    game:GetService("RunService").RenderStepped:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = vel
+    end 
+end)
